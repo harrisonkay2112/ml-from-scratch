@@ -1,0 +1,15 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# Data — regenerate with scripts/get_mnist.py, don't commit binaries
+data/
+
+# Training outputs
+checkpoints/
+*.npz
+*.pt
+
+# Plots are committed deliberately (they're the portfolio artifact),
+# so no blanket *.png ignore here.
