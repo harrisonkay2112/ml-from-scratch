@@ -1,65 +1,83 @@
 # ML From Scratch
 
-> **Session type:** build sessions, Python. Start with: *"Read the README, let's start phase 1."*
-> Above-the-line rule applies to the math and the architecture. Below the line: library syntax,
-> CUDA/driver setup, plotting.
+A learning repository for building small machine learning models in Python and understanding the math behind their predictions and training.
 
-## What it is
-Build and train neural networks **from first principles**, ending with a small language model
-trained overnight on this laptop. Not calling an API — building the thing.
+Starting with a C++ and JavaScript background, I'm working through prediction functions, loss, gradients, and evaluation before moving to larger models. Each exercise keeps the calculations visible rather than hiding them behind a machine learning framework.
 
-## Hardware (verified 2026-08-30)
-- **GPU:** NVIDIA RTX 4070 Laptop, **8 GB VRAM**, driver 616.56 — CUDA-capable
-- **CPU:** i7-13700HX (16 cores / 24 threads), **32 GB RAM**
-- **Python:** 3.12.10
+## Current exercises
 
-**What that hardware can actually do:**
-- ✅ MNIST / CIFAR CNNs — minutes
-- ✅ Character-level transformer, ~10–50M params — **trains overnight, comfortably**
-- ✅ LoRA fine-tune of a 1–3B model (quantized) — hours
-- ❌ Training a 7B+ model from scratch — not on 8 GB, don't try
+| Exercise | Status | Concepts |
+| --- | --- | --- |
+| [Linear regression](fundamentals/linear_regression.py) | Implemented | One input, mean squared error, gradient descent, separate training and test examples |
+| [Multiple linear regression](fundamentals/multiple_linear_regression.py) | Starter dataset only | Next: two inputs, two weights, one bias |
 
-## Why this project
-- **Differentiator.** Most students can call an LLM API. Very few can explain backprop because
-  they *implemented* it. That gap shows instantly in interviews.
-- **It's the honest version of "I know AI."** Ties to the stated interest in AI without being
-  another agent-orchestration project.
-- **Portfolio value:** a from-scratch neural net + a trained-it-myself language model is a
-  genuinely strong pair for a junior CE resume.
+The current exercises use plain Python and synthetic data. No third-party packages or GPU are required.
 
-## Roadmap
+## Run an exercise
 
-**Phase 1 — neural net in raw NumPy (no PyTorch).** MNIST digit classifier. Implement forward pass,
-loss, **backprop by hand**, and gradient descent. Runs on CPU in minutes.
-*This phase is the whole point — do not skip to PyTorch.* If you can derive and code backprop,
-you understand ML. If you can't, you're an API caller.
+From the repository root, create a virtual environment if you don't already have one:
 
-**Phase 2 — same thing in PyTorch.** Rebuild phase 1 using a real framework. The contrast is the
-lesson: see exactly what `loss.backward()` was doing for you.
+```bash
+python -m venv .venv
+```
 
-**Phase 3 — CNN on CIFAR-10.** Convolutions, pooling, data augmentation. First real GPU training.
+On Windows using Git Bash:
 
-**Phase 4 — character-level transformer, trained overnight.** Implement attention from scratch,
-train on a text corpus you pick (something with personality — not generic scraped web text).
-This is the headline portfolio piece. Log the training curve; the artifact is the *process*,
-not just the weights.
+```bash
+source .venv/Scripts/activate
+python fundamentals/linear_regression.py
+python fundamentals/multiple_linear_regression.py
+```
 
-**Phase 5 — write it up.** A README with training curves, sample outputs, what failed, what you'd
-change. The write-up is a large share of the portfolio value.
+On Windows using PowerShell, you can run the environment's Python directly:
 
-## Phase 1 first slice
-1. Load MNIST (`torchvision` or raw idx files — your call).
-2. One layer, forward pass only: `output = input @ weights + bias`. Verify the shapes.
-3. Then loss. Then the backward pass, one layer at a time.
+```powershell
+.\.venv\Scripts\python.exe fundamentals\linear_regression.py
+.\.venv\Scripts\python.exe fundamentals\multiple_linear_regression.py
+```
 
-Design questions that are yours:
-- What are the matrix shapes at each step, and why? *(Shape errors will be 90% of your bugs —
-  learn to reason about them, not guess.)*
-- Why does the loss need to be differentiable?
-- What actually is a gradient, in one plain sentence?
+On macOS or Linux, activate with `source .venv/bin/activate`, then run the same `python fundamentals/...` commands.
 
-## Setup notes (below the line, just do these)
-- Use a virtual environment: `python -m venv .venv`
-- Install the **CUDA** build of PyTorch, not the CPU one — check `torch.cuda.is_available()`
-  returns `True` before phase 3, or you'll silently train on CPU and wonder why it takes 40 hours.
-- Phases 1–2 need only `numpy` and `matplotlib`.
+## What the first model does
+
+The prediction rule is:
+
+```text
+prediction = weight * x + bias
+```
+
+Training starts weight and bias at zero, then makes 1,000 passes through three examples: `(1, 6)`, `(2, 11)`, and `(3, 13)`. Each pass computes errors and updates both parameters using the gradients of mean squared error.
+
+The learned values are approximately:
+
+```text
+weight = 3.5
+bias = 3.0
+training loss = 0.5
+```
+
+The points do not lie exactly on a straight line, so the best-fitting line still has nonzero loss.
+
+After training, the script evaluates separate examples without updating the parameters:
+
+| Input | Target | Prediction |
+| --- | --- | --- |
+| 4 | 18 | 17.0 |
+| 5 | 22 | 20.5 |
+
+The test mean squared error is approximately **1.625**. These tiny, invented datasets demonstrate the evaluation process; they do not establish real-world predictive performance. The test inputs also lie outside the training input range.
+
+Every execution trains from zero. Parameters stay in memory during that run and are not saved to disk.
+
+## Next steps
+
+- Implement multiple-input prediction and understand each weight's role.
+- Extend the loss and gradient calculations to multiple inputs.
+- Visualize model fit and training progress.
+- Practice evaluation on larger datasets and compare against simple baselines.
+
+A possible separate portfolio project will investigate whether information extracted from news or company statements adds predictive value beyond numerical market data. This repository is for the fundamentals leading up to that work; no market-data pipeline or trading system is implemented here.
+
+## Earlier scaffolding
+
+The repository history includes an earlier MNIST direction, and `scripts/get_mnist.py` is a data-download utility from that setup. It is not needed for the current exercises. Local environments and downloaded data are excluded from Git through `.gitignore`.
