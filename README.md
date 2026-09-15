@@ -9,7 +9,8 @@ Starting with a C++ and JavaScript background, I'm working through prediction fu
 | Exercise | Status | Concepts |
 | --- | --- | --- |
 | [Linear regression](fundamentals/linear_regression.py) | Implemented | One input, mean squared error, gradient descent, separate training and test examples |
-| [Multiple linear regression](fundamentals/multiple_linear_regression.py) | Starter dataset only | Next: two inputs, two weights, one bias |
+| [Multiple linear regression](fundamentals/multiple_linear_regression.py) | Implemented | Two inputs, two weights, one bias, and gradient descent |
+| [Market training rows](fundamentals/market_rows.py) | Data preparation exercise | Read synthetic CSV data and separate available inputs from a future target |
 
 The current exercises use plain Python and synthetic data. No third-party packages or GPU are required.
 
@@ -27,6 +28,7 @@ On Windows using Git Bash:
 source .venv/Scripts/activate
 python fundamentals/linear_regression.py
 python fundamentals/multiple_linear_regression.py
+python fundamentals/market_rows.py
 ```
 
 On Windows using PowerShell, you can run the environment's Python directly:
@@ -71,8 +73,8 @@ Every execution trains from zero. Parameters stay in memory during that run and 
 
 ## Next steps
 
-- Implement multiple-input prediction and understand each weight's role.
-- Extend the loss and gradient calculations to multiple inputs.
+- Turn CSV observations into input and target rows.
+- Scale inputs using training data and split examples chronologically.
 - Visualize model fit and training progress.
 - Practice evaluation on larger datasets and compare against simple baselines.
 
